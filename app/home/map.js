@@ -1,6 +1,6 @@
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Button, Text, TextInput } from "react-native";
+import { StyleSheet, View, Text, TextInput } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 export default function Map() {

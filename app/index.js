@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function App() {
   return (
     <View style={styles.container}>
-      <Link href="map">Map</Link>
+      <Link href="home/settings">Home</Link>
       <StatusBar style="auto" />
     </View>
   );
