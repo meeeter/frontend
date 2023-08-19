@@ -1,5 +1,4 @@
 import "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Google from "expo-auth-session/providers/google";
 import { router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
@@ -34,7 +33,6 @@ export default function App() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUserInfo(user);
-        await AsyncStorage.setItem("@user", JSON.stringify(user));
         router.push("/home/settings");
       } else {
         console.log("User is not authenticated");
