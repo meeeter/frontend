@@ -1,8 +1,14 @@
 import "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Google from "expo-auth-session/providers/google";
+import { router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-import { useEffect } from "react";
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithCredential,
+} from "firebase/auth";
+import { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import { auth } from "../firebaseConfig";
@@ -10,6 +16,7 @@ import { auth } from "../firebaseConfig";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
+  const [userInfo, setUserInfo] = useState();
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
@@ -22,6 +29,20 @@ export default function App() {
       signInWithCredential(auth, credential);
     }
   }, [response]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUserInfo(user);
+        await AsyncStorage.setItem("@user", JSON.stringify(user));
+        router.push("/home/settings");
+      } else {
+        console.log("User is not authenticated");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <View style={styles.container}>
