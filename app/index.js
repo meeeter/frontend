@@ -7,15 +7,17 @@ import {
   onAuthStateChanged,
   signInWithCredential,
 } from "firebase/auth";
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import { auth } from "../firebaseConfig";
+import { userAtom } from "../userAtom";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
-  const [userInfo, setUserInfo] = useState();
+  const [, setUser] = useAtom(userAtom);
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
@@ -32,7 +34,11 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUserInfo(user);
+        setUser({
+          displayName: user.displayName || "",
+          email: user.email || "",
+          photoURL: user.photoURL || "",
+        });
         router.push("/home/settings");
       } else {
         console.log("User is not authenticated");
@@ -40,7 +46,7 @@ export default function App() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [setUser]);
 
   return (
     <View style={styles.container}>
