@@ -8,7 +8,7 @@ import {
   signInWithCredential,
 } from "firebase/auth";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import { auth } from "../firebaseConfig";
