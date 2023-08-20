@@ -22,6 +22,7 @@ export default function App() {
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
   });
+  const serverURL = process.env.EXPO_PUBLIC_SERVER_URL;
 
   useEffect(() => {
     if (response?.type === "success") {
@@ -39,7 +40,39 @@ export default function App() {
           email: user.email || "",
           photoURL: user.photoURL || "",
         });
-        router.push("/home/settings");
+
+        const { email } = user;
+        try {
+          const existingUserResponse = await fetch(
+            `${serverURL}/users/${email}`,
+            {
+              method: "GET",
+            },
+          );
+
+          const existingUserText = await existingUserResponse.text();
+
+          if (existingUserText.exists) {
+            console.log("User already exists");
+          } else {
+            const newUser = await fetch(`${serverURL}/users`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ user }),
+            });
+
+            if (newUser.ok) {
+              console.log("User registered successfully");
+            } else {
+              console.error("User registration failed");
+            }
+          }
+          router.push("/home/settings");
+        } catch (error) {
+          console.error(error);
+        }
       } else {
         console.log("User is not authenticated");
       }
