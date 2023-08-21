@@ -70,9 +70,7 @@ export default function App() {
             },
           );
 
-          const existingUserText = await existingUserResponse.text();
-
-          if (existingUserText.exists) {
+          if (existingUserResponse.ok) {
             console.log("User already exists");
           } else {
             const newUser = await fetch(`${serverURL}/users`, {
