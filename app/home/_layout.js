@@ -19,6 +19,7 @@ export default () => {
               <FontAwesome5 name="user-friends" size={24} color={color} />
             ),
             title: "Friends",
+            headerShown: false,
           }}
         />
         <Tabs.Screen

@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 
-export default function Friends() {
+export default function FriendList() {
   return (
     <View>
-      <Text>Friends</Text>
+      <Text>Add Friend</Text>
     </View>
   );
 }
