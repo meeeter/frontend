@@ -13,6 +13,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import { auth } from "../firebaseConfig";
 import { userAtom } from "../userAtom";
+import { initializeSocket, getSocket } from "../utils/socketConfig";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -23,6 +24,25 @@ export default function App() {
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
   });
   const serverURL = process.env.EXPO_PUBLIC_SERVER_URL;
+
+  useEffect(() => {
+    initializeSocket();
+
+    const socket = getSocket();
+
+    socket.on("connect", () => {
+      console.log("connected to server");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("disconnected from server");
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+    };
+  }, []);
 
   useEffect(() => {
     if (response?.type === "success") {
