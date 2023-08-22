@@ -55,12 +55,6 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUser({
-          displayName: user.displayName || "",
-          email: user.email || "",
-          photoURL: user.photoURL || "",
-        });
-
         const { email } = user;
         try {
           const existingUserResponse = await fetch(
@@ -70,7 +64,15 @@ export default function App() {
             },
           );
 
+          const existingUserData = await existingUserResponse.json();
+
           if (existingUserResponse.ok) {
+            setUser({
+              displayName: user.displayName,
+              email: user.email,
+              photoURL: user.photoURL,
+              id: existingUserData.existingUser._id,
+            });
             console.log("User already exists");
           } else {
             const newUser = await fetch(`${serverURL}/users`, {
@@ -81,7 +83,15 @@ export default function App() {
               body: JSON.stringify({ user }),
             });
 
+            const newUserData = await newUser.json();
+
             if (newUser.ok) {
+              setUser({
+                displayName: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+                id: newUserData.newUser._id,
+              });
               console.log("User registered successfully");
             } else {
               console.error("User registration failed");
@@ -91,6 +101,7 @@ export default function App() {
         } catch (error) {
           console.error(error);
         }
+
       } else {
         console.log("User is not authenticated");
       }
