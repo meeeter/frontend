@@ -4,4 +4,5 @@ export const userAtom = atom({
   displayName: "",
   email: "",
   photoURL: "",
+  id: "",
 });
