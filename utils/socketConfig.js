@@ -3,9 +3,13 @@ import io from "socket.io-client";
 let socket;
 const serverURL = process.env.EXPO_PUBLIC_SERVER_URL;
 
-export const initializeSocket = () => {
+export const initializeSocket = (userId) => {
   if (!socket) {
-    socket = io(serverURL);
+    socket = io(serverURL, {
+      extraHeaders: {
+        userId,
+      },
+    });
   }
 };
 

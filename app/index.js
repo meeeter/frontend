@@ -13,36 +13,17 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import { auth } from "../firebaseConfig";
 import { userAtom } from "../userAtom";
-import { initializeSocket, getSocket } from "../utils/socketConfig";
+import { initializeSocket } from "../utils/socketConfig";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
   const [, setUser] = useAtom(userAtom);
-  const [request, response, promptAsync] = Google.useAuthRequest({
+  const [response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
   });
   const serverURL = process.env.EXPO_PUBLIC_SERVER_URL;
-
-  useEffect(() => {
-    initializeSocket();
-
-    const socket = getSocket();
-
-    socket.on("connect", () => {
-      console.log("connected to server");
-    });
-
-    socket.on("disconnect", () => {
-      console.log("disconnected from server");
-    });
-
-    return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-    };
-  }, []);
 
   useEffect(() => {
     if (response?.type === "success") {
@@ -74,6 +55,7 @@ export default function App() {
               id: existingUserData.existingUser._id,
             });
             console.log("User already exists");
+            initializeSocket(existingUserData.existingUser._id);
           } else {
             const newUser = await fetch(`${serverURL}/users`, {
               method: "POST",
@@ -93,6 +75,7 @@ export default function App() {
                 id: newUserData.newUser._id,
               });
               console.log("User registered successfully");
+              initializeSocket(newUserData.newUser._id);
             } else {
               console.error("User registration failed");
             }
@@ -101,7 +84,6 @@ export default function App() {
         } catch (error) {
           console.error(error);
         }
-
       } else {
         console.log("User is not authenticated");
       }
