@@ -3,14 +3,17 @@ import { useState } from "react";
 import { View, Text, Image, Button, StyleSheet, TextInput } from "react-native";
 
 import { userAtom } from "../../../userAtom";
+import { getSocket } from "../../../utils/socketConfig";
 
 export default function AddFriend() {
   const [user] = useAtom(userAtom);
   const [searchText, setSearchText] = useState("");
   const [foundUser, setFoundUser] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
+  const [friendRequestSent, setFriendRequestSent] = useState(false);
 
   const serverURL = process.env.EXPO_PUBLIC_SERVER_URL;
+  const socket = getSocket();
 
   const searchUser = async () => {
     try {
@@ -29,6 +32,16 @@ export default function AddFriend() {
     } catch (error) {
       console.error("Error fetching user:", error);
     }
+  };
+
+  const sendFriendRequest = () => {
+    socket.emit("sendFriendRequest", {
+      sender: user.id,
+      recipient: foundUser._id,
+      status: "pending",
+    });
+
+    setFriendRequestSent(true);
   };
 
   return (
@@ -53,7 +66,11 @@ export default function AddFriend() {
             <Text style={styles.usernameText}>{foundUser.username}</Text>
             <Text style={styles.emailText}>{foundUser.email}</Text>
           </View>
-          <Button title="Send" />
+          <Button
+            title={friendRequestSent ? "Sent" : "Send"}
+            disabled={friendRequestSent}
+            onPress={sendFriendRequest}
+          />
         </View>
       )}
     </View>
