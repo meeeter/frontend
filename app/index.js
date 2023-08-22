@@ -19,7 +19,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
   const [, setUser] = useAtom(userAtom);
-  const [response, promptAsync] = Google.useAuthRequest({
+  const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
   });
