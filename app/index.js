@@ -39,7 +39,7 @@ export default function App() {
         const { email } = user;
         try {
           const existingUserResponse = await fetch(
-            `${serverURL}/users/${email}`,
+            `${serverURL}/users?email=${email}`,
             {
               method: "GET",
             },

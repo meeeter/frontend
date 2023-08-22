@@ -17,7 +17,7 @@ export default function AddFriend() {
 
   const searchUser = async () => {
     try {
-      const response = await fetch(`${serverURL}/users/${searchText}`, {
+      const response = await fetch(`${serverURL}/users?email=${searchText}`, {
         method: "GET",
       });
 
