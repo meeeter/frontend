@@ -1,10 +1,11 @@
 import io from "socket.io-client";
 
 let socket;
+const serverURL = process.env.EXPO_PUBLIC_SERVER_URL;
 
 export const initializeSocket = () => {
   if (!socket) {
-    socket = io("http://192.168.0.49:3000");
+    socket = io(serverURL);
   }
 };
 
