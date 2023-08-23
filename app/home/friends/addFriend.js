@@ -11,12 +11,20 @@ export default function AddFriend() {
   const [foundUser, setFoundUser] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
   const [friendRequestSent, setFriendRequestSent] = useState(false);
+  const [searchedSelf, setSearchedSelf] = useState(false);
 
   const serverURL = process.env.EXPO_PUBLIC_SERVER_URL;
   const socket = getSocket();
 
   const searchUser = async () => {
     try {
+      if (searchText === user.email) {
+        setUserNotFound(false);
+        setFoundUser(null);
+        setFriendRequestSent(false);
+        setSearchedSelf(true);
+        return;
+      }
       const response = await fetch(`${serverURL}/users?email=${searchText}`, {
         method: "GET",
       });
@@ -25,9 +33,11 @@ export default function AddFriend() {
         const userData = await response.json();
         setFoundUser(userData.existingUser);
         setUserNotFound(false);
+        setSearchedSelf(false);
       } else {
         setFoundUser(null);
         setUserNotFound(true);
+        setSearchedSelf(false);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -57,8 +67,8 @@ export default function AddFriend() {
         />
       </View>
 
-      {userNotFound && <Text style={styles.noUserText}>User Not Found</Text>}
-
+      {userNotFound && <Text style={styles.errorText}>User Not Found</Text>}
+      {searchedSelf && <Text style={styles.errorText}>You cannot send a friend request to yourself.</Text>}
       {foundUser && (
         <View style={styles.profileCard}>
           <Image source={{ uri: foundUser.photoURL }} style={styles.photoURL} />
@@ -123,8 +133,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 4,
   },
-  noUserText: {
+  errorText: {
     fontSize: 16,
     fontStyle: "italic",
+    fontWeight: "bold",
   },
 });
