@@ -1,14 +1,37 @@
+import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { View, Text, Image, Button, StyleSheet } from "react-native";
 
+import { userAtom } from "../../../userAtom";
 import { getSocket } from "../../../utils/socketConfig";
 
 export default function FriendRequests() {
-  const [friendRequests, setFriendRequests] = useState([]);
+  const [user] = useAtom(userAtom);
+  const [receivedFriendRequests, setReceivedFriendRequests] = useState([]);
+  const [sentFriendRequests, setSentFriendRequests] = useState([]);
   const serverURL = process.env.EXPO_PUBLIC_SERVER_URL;
 
   useEffect(() => {
     const socket = getSocket();
+
+    const loadFriendRequests = async () => {
+      try {
+        const response = await fetch(
+          `${serverURL}/users/${user.id}/friend-requests`,
+        );
+        if (response.ok) {
+          const friendRequestsData = await response.json();
+          const { receivedFriendRequests, sentFriendRequests } =
+            friendRequestsData;
+          setReceivedFriendRequests(receivedFriendRequests);
+          setSentFriendRequests(sentFriendRequests);
+        }
+      } catch (error) {
+        console.error("Error loading friend reqeusts:", error);
+      }
+    };
+
+    loadFriendRequests();
 
     socket.on("friendRequestReceived", async (data) => {
       try {
@@ -16,7 +39,10 @@ export default function FriendRequests() {
         const response = await fetch(`${serverURL}/users/${userId}`);
         if (response.ok) {
           const senderUser = await response.json();
-          setFriendRequests((prevRequests) => [...prevRequests, senderUser]);
+          setReceivedFriendRequests((prevRequests) => [
+            ...prevRequests,
+            { fromUser: senderUser },
+          ]);
         }
       } catch (error) {
         console.error("Error fetching sender user:", error);
@@ -33,16 +59,43 @@ export default function FriendRequests() {
 
   return (
     <View style={styles.container}>
-      {friendRequests.map((sender) => (
-        <View key={sender._id} style={styles.profileCard}>
-          <Image source={{ uri: sender.photoURL }} style={styles.photoURL} />
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionHeaderText}>Received</Text>
+      </View>
+      {receivedFriendRequests.map((request) => (
+        <View key={request.fromUser._id} style={styles.profileCard}>
+          <Image
+            source={{ uri: request.fromUser.photoURL }}
+            style={styles.photoURL}
+          />
           <View style={styles.userInfo}>
-            <Text style={styles.usernameText}>{sender.username}</Text>
-            <Text style={styles.emailText}>{sender.email}</Text>
+            <Text style={styles.usernameText}>{request.fromUser.username}</Text>
+            <Text style={styles.emailText}>{request.fromUser.email}</Text>
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Accept" onPress={() => acceptFriendRequest(sender._id)} />
-            <Button title="Reject" onPress={() => rejectFriendRequest(sender._id)} />
+            <Button
+              title="Accept"
+              // onPress={() => acceptFriendRequest(sender._id)}
+            />
+            <Button
+              title="Reject"
+              // onPress={() => rejectFriendRequest(sender._id)}
+            />
+          </View>
+        </View>
+      ))}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionHeaderText}>Sent</Text>
+      </View>
+      {sentFriendRequests.map((request) => (
+        <View key={request.toUser._id} style={styles.profileCard}>
+          <Image
+            source={{ uri: request.toUser.photoURL }}
+            style={styles.photoURL}
+          />
+          <View style={styles.userInfo}>
+            <Text style={styles.usernameText}>{request.toUser.username}</Text>
+            <Text style={styles.emailText}>{request.toUser.email}</Text>
           </View>
         </View>
       ))}
@@ -57,14 +110,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
   },
+  sectionContainer: {
+    alignSelf: "stretch",
+    marginBottom: 20,
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+  },
+  sectionHeaderText: {
+    fontSize: 25,
+    fontWeight: "bold",
+  },
   profileCard: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
   },
   photoURL: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 50,
     marginRight: 16,
   },
@@ -77,7 +141,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   emailText: {
-    fontSize: 16,
+    fontSize: 15,
     marginBottom: 4,
   },
   buttonContainer: {
