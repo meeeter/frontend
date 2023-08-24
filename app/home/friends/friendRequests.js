@@ -18,6 +18,7 @@ export default function FriendRequests() {
       try {
         const response = await fetch(
           `${serverURL}/users/${user.id}/friend-requests`,
+          { method: "GET" },
         );
         if (response.ok) {
           const friendRequestsData = await response.json();
@@ -36,7 +37,9 @@ export default function FriendRequests() {
     socket.on("friendRequestReceived", async (data) => {
       try {
         const userId = data.sender;
-        const response = await fetch(`${serverURL}/users/${userId}`);
+        const response = await fetch(`${serverURL}/users/${userId}`, {
+          method: "GET",
+        });
         if (response.ok) {
           const senderUser = await response.json();
           setReceivedFriendRequests((prevRequests) => [
@@ -54,7 +57,56 @@ export default function FriendRequests() {
     };
   }, []);
 
-  const acceptFriendRequest = (senderId) => {};
+  const acceptFriendRequest = async (senderId) => {
+    const userId = user.id;
+    try {
+      const deleteRecipientRequest = await fetch(
+        `${serverURL}/users/${userId}/friend-requests?friendId=${senderId}`,
+        { method: "DELETE" },
+      );
+
+      const deleteSenderRequest = await fetch(
+        `${serverURL}/users/${senderId}/friend-requests?friendId=${userId}`,
+        { method: "DELETE" },
+      );
+
+      const addRecipientFriend = await fetch(
+        `${serverURL}/users/${userId}/friends`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ friendId: senderId }),
+        },
+      );
+
+      const addSenderFriend = await fetch(
+        `${serverURL}/users/${senderId}/friends`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ friendId: userId }),
+        },
+      );
+
+      if (
+        deleteRecipientRequest.ok &&
+        deleteSenderRequest.ok &&
+        addRecipientFriend.ok &&
+        addSenderFriend.ok
+      ) {
+        setReceivedFriendRequests((prevRequests) =>
+          prevRequests.filter((request) => request.fromUser._id !== senderId),
+        );
+      }
+    } catch (error) {
+      console.error("Error accepting friend request:", error);
+    }
+  };
+
   const rejectFriendRequest = (senderId) => {};
 
   return (
@@ -75,11 +127,11 @@ export default function FriendRequests() {
           <View style={styles.buttonContainer}>
             <Button
               title="Accept"
-              // onPress={() => acceptFriendRequest(sender._id)}
+              onPress={() => acceptFriendRequest(request.fromUser._id)}
             />
             <Button
               title="Reject"
-              // onPress={() => rejectFriendRequest(sender._id)}
+              // onPress={() => rejectFriendRequest(request.fromUser._id)}
             />
           </View>
         </View>
