@@ -1,10 +1,14 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import { atom, useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, TextInput } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
+export const locationAtom = atom(null);
+
 export default function Map() {
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useAtom(locationAtom);
   const [initialRegion, setInitialRegion] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedLocation, setSearchedLocation] = useState(null);
@@ -33,8 +37,24 @@ export default function Map() {
           timeInterval: 1000,
           distanceInterval: 10,
         },
-        (newLocation) => {
-          setLocation(newLocation);
+        async (newLocation) => {
+          const address = await Location.reverseGeocodeAsync(
+            newLocation.coords,
+          );
+          const w3wAPIKey = process.env.EXPO_PUBLIC_W3W_API_KEY;
+          const w3wData = await fetch(
+            `https://api.what3words.com/v3/convert-to-3wa?key=${w3wAPIKey}&coordinates=${newLocation.coords.latitude},${newLocation.coords.longitude}&language=ko&format=json`,
+            {
+              method: "GET",
+            },
+          );
+          const w3w = await w3wData.json();
+
+          setLocation({
+            coords: newLocation.coords,
+            address: address[0],
+            w3w,
+          });
         },
       );
     };
@@ -104,18 +124,23 @@ export default function Map() {
           style={styles.map}
           initialRegion={initialRegion}
           mapType="mutedStandard"
-          showsUserLocation
+          // showsUserLocation
+          followsUserLocation
           userLocationPriority="balanced"
         >
           {location && (
-            <Marker coordinate={location.coords} title="My Location" />
+            <Marker coordinate={location.coords} title="My Location">
+              <MaterialCommunityIcons name="penguin" size={40} color="red" />
+            </Marker>
           )}
           {searchedLocation && (
             <Marker
               coordinate={searchedLocation}
               pinColor="green"
               title={searchPredictions[0].structured_formatting.main_text}
-            />
+            >
+              <MaterialCommunityIcons name="penguin" size={40} color="green" />
+            </Marker>
           )}
         </MapView>
       )}
