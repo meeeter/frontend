@@ -18,7 +18,9 @@ export default function FriendRequests() {
       try {
         const response = await fetch(
           `${serverURL}/users/${user.id}/friend-requests`,
-          { method: "GET" },
+          {
+            method: "GET",
+          },
         );
         if (response.ok) {
           const friendRequestsData = await response.json();
