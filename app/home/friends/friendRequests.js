@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
-import { View, Text, Image, Button, StyleSheet } from "react-native";
+import { View, Text, Image, Button, StyleSheet, Alert } from "react-native";
 
 import { userAtom } from "../../../userAtom";
 import { getSocket } from "../../../utils/socketConfig";
@@ -57,7 +57,7 @@ export default function FriendRequests() {
     };
   }, []);
 
-  const acceptFriendRequest = async (senderId) => {
+  const acceptFriendRequest = async (senderId, senderUsername) => {
     const userId = user.id;
     try {
       const deleteRecipientRequest = await fetch(
@@ -101,13 +101,36 @@ export default function FriendRequests() {
         setReceivedFriendRequests((prevRequests) =>
           prevRequests.filter((request) => request.fromUser._id !== senderId),
         );
+        Alert.alert(`You're now friends with ${senderUsername} 🥳`);
       }
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
   };
 
-  const rejectFriendRequest = (senderId) => {};
+  const rejectFriendRequest = async (senderId, senderUsername) => {
+    const userId = user.id;
+    try {
+      const deleteRecipientRequest = await fetch(
+        `${serverURL}/users/${userId}/friend-requests?friendId=${senderId}`,
+        { method: "DELETE" },
+      );
+
+      const deleteSenderRequest = await fetch(
+        `${serverURL}/users/${senderId}/friend-requests?friendId=${userId}`,
+        { method: "DELETE" },
+      );
+
+      if (deleteRecipientRequest.ok && deleteSenderRequest.ok) {
+        setReceivedFriendRequests((prevRequests) =>
+          prevRequests.filter((request) => request.fromUser._id !== senderId),
+        );
+        Alert.alert(`You've rejected ${senderUsername}'s friend request 😈`);
+      }
+    } catch (error) {
+      console.error("Error rejecting friend request:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -127,11 +150,21 @@ export default function FriendRequests() {
           <View style={styles.buttonContainer}>
             <Button
               title="Accept"
-              onPress={() => acceptFriendRequest(request.fromUser._id)}
+              onPress={() =>
+                acceptFriendRequest(
+                  request.fromUser._id,
+                  request.fromUser.username,
+                )
+              }
             />
             <Button
               title="Reject"
-              // onPress={() => rejectFriendRequest(request.fromUser._id)}
+              onPress={() =>
+                rejectFriendRequest(
+                  request.fromUser._id,
+                  request.fromUser.username,
+                )
+              }
             />
           </View>
         </View>
