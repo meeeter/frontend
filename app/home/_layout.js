@@ -29,6 +29,7 @@ export default () => {
               <FontAwesome5 name="map-marked-alt" size={24} color={color} />
             ),
             title: "Map",
+            headerShown: false,
           }}
         />
         <Tabs.Screen
@@ -42,6 +43,7 @@ export default () => {
               />
             ),
             title: "Emergency",
+            headerShown: false,
           }}
         />
         <Tabs.Screen
@@ -51,6 +53,7 @@ export default () => {
               <FontAwesome5 name="user-cog" size={24} color={color} />
             ),
             title: "Settings",
+            headerShown: false,
           }}
         />
       </Tabs>
