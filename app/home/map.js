@@ -5,15 +5,23 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, TextInput } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
+import { userAtom } from "../../userAtom";
+import { getSocket } from "../../utils/socketConfig";
+
 export const locationAtom = atom(null);
+export const friendLocationsAtom = atom([]);
 
 export default function Map() {
+  const [user] = useAtom(userAtom);
   const [location, setLocation] = useAtom(locationAtom);
+  const [friendLocations, setFriendLocations] = useAtom(friendLocationsAtom);
   const [initialRegion, setInitialRegion] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchedLocation, setSearchedLocation] = useState(null);
   const [searchPredictions, setSearchPredictions] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  const socket = getSocket();
 
   useEffect(() => {
     const getLocation = async () => {
@@ -55,11 +63,39 @@ export default function Map() {
             address: address[0],
             w3w,
           });
+
+          socket.emit("updateLocation", {
+            id: user.id,
+            username: user.displayName,
+            location: newLocation.coords,
+          });
         },
       );
     };
 
     getLocation();
+  }, []);
+
+  useEffect(() => {
+    socket.on("friendLocationUpdate", (data) => {
+      setFriendLocations((prevLocations) => {
+        const updatedLocations = prevLocations.filter(
+          (location) => location.id !== data.id,
+        );
+
+        updatedLocations.push({
+          id: data.id,
+          username: data.username,
+          location: data.location,
+        });
+
+        return updatedLocations;
+      });
+    });
+
+    return () => {
+      socket.off("friendLocationUpdate");
+    };
   }, []);
 
   const handleSearch = async () => {
@@ -95,6 +131,18 @@ export default function Map() {
     } catch (error) {
       console.error("Error fetching autocomplete data:", error);
     }
+  };
+
+  const renderFriendMarkers = () => {
+    return friendLocations.map((friendLocation) => (
+      <Marker
+        key={friendLocation.id}
+        coordinate={friendLocation.location}
+        title={friendLocation.username}
+      >
+        <MaterialCommunityIcons name="penguin" size={40} color="blue" />
+      </Marker>
+    ));
   };
 
   return (
@@ -133,6 +181,7 @@ export default function Map() {
               <MaterialCommunityIcons name="penguin" size={40} color="red" />
             </Marker>
           )}
+          {renderFriendMarkers()}
           {searchedLocation && (
             <Marker
               coordinate={searchedLocation}
