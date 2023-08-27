@@ -1,94 +1,45 @@
-import { AntDesign } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 export default function Friends() {
-  const [pressedCard, setPressedCard] = useState(null);
-
-  const handlePressIn = (card) => {
-    setPressedCard(card);
-  };
-
-  const handlePressOut = () => {
-    setPressedCard(null);
-  };
-
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={[
-          styles.card,
-          pressedCard === "friendList" && styles.pressedCard,
-        ]}
-        onPressIn={() => handlePressIn("friendList")}
-        onPressOut={handlePressOut}
-        activeOpacity={0.7}
+        style={styles.card}
+        onPress={() => router.push("home/friends/friendList")}
       >
-        <Link style={styles.link} href="home/friends/friendList">
-          <Text
-            style={[
-              styles.cardTitle,
-              pressedCard === "friendList" && styles.pressedText,
-            ]}
-          >
-            Friend List
-          </Text>
-        </Link>
-        <AntDesign
-          name="arrowright"
-          size={24}
-          color={pressedCard === "friendList" ? "#fff" : "#f16523"}
+        <MaterialCommunityIcons
+          name="account-box-multiple"
+          size={60}
+          color="black"
         />
+        <View style={styles.cardText}>
+          <Text style={styles.title}>FRIEND LIST</Text>
+          <Text style={styles.description}>See all your friends</Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.card, pressedCard === "addFriend" && styles.pressedCard]}
-        onPressIn={() => handlePressIn("addFriend")}
-        onPressOut={handlePressOut}
-        activeOpacity={0.7}
+        style={styles.card}
+        onPress={() => router.push("home/friends/addFriend")}
       >
-        <Link style={styles.link} href="home/friends/addFriend">
-          <Text
-            style={[
-              styles.cardTitle,
-              pressedCard === "addFriend" && styles.pressedText,
-            ]}
-          >
-            Add Friend
-          </Text>
-        </Link>
-        <AntDesign
-          name="arrowright"
-          size={24}
-          color={pressedCard === "newFriend" ? "#fff" : "#f16523"}
-        />
+        <MaterialCommunityIcons name="account-search" size={60} color="black" />
+        <View style={styles.cardText}>
+          <Text style={styles.title}>ADD FRIEND</Text>
+          <Text style={styles.description}>Search and add your friend</Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[
-          styles.card,
-          pressedCard === "friendRequests" && styles.pressedCard,
-        ]}
-        onPressIn={() => handlePressIn("friendRequests")}
-        onPressOut={handlePressOut}
-        activeOpacity={0.7}
+        style={styles.card}
+        onPress={() => router.push("home/friends/friendRequests")}
       >
-        <Link style={styles.link} href="home/friends/friendRequests">
-          <Text
-            style={[
-              styles.cardTitle,
-              pressedCard === "friendRequests" && styles.pressedText,
-            ]}
-          >
-            Friend Requests
-          </Text>
-        </Link>
-        <AntDesign
-          name="arrowright"
-          size={24}
-          color={pressedCard === "friendRequests" ? "#fff" : "#f16523"}
-        />
+        <MaterialCommunityIcons name="account-heart" size={60} color="black" />
+        <View style={styles.cardText}>
+          <Text style={styles.title}>FRIEND REQUESTS</Text>
+          <Text style={styles.description}>See received and sent requests</Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -97,41 +48,30 @@ export default function Friends() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 15,
-    backgroundColor: "#f8f8f8",
+    justifyContent: "center",
   },
   card: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 20,
-    paddingHorizontal: 20,
+    padding: 20,
     backgroundColor: "#fff",
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    marginBottom: 20,
     elevation: 5,
-    marginBottom: 10,
+    shadowColor: "rgba(0, 0, 0, 0.2)",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 1,
   },
-  pressedCard: {
-    backgroundColor: "#f16523",
+  cardText: {
+    marginLeft: 20,
   },
-  link: {
-    flex: 1,
-    marginRight: 10,
-  },
-  cardTitle: {
-    fontSize: 18,
+  title: {
+    fontSize: 20,
     fontWeight: "bold",
-    color: "#231f20",
+    textTransform: "uppercase",
   },
-  pressedText: {
-    color: "#fff",
+  description: {
+    marginTop: 5,
+    fontSize: 16,
   },
 });
