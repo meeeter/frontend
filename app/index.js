@@ -80,7 +80,7 @@ export default function App() {
               console.error("User registration failed");
             }
           }
-          router.push("/home/map");
+          router.push("/home/settings");
         } catch (error) {
           console.error(error);
         }
