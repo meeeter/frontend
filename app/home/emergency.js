@@ -7,7 +7,7 @@ import * as SMS from "expo-sms";
 import { useAtom } from "jotai";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-import { locationAtom } from "./map";
+import { locationAtom } from "../../locationAtom";
 
 export default function Emergency() {
   const [location] = useAtom(locationAtom);

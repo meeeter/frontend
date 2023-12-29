@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import * as Google from "expo-auth-session/providers/google";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import {
   GoogleAuthProvider,
@@ -8,22 +8,52 @@ import {
   signInWithCredential,
 } from "firebase/auth";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import { auth } from "../firebaseConfig";
 import { userAtom } from "../userAtom";
 import { initializeSocket } from "../utils/socketConfig";
 
+import * as Location from "expo-location";
+import { initialRegionAtom } from "../initialRegionAtom";
+import { locationAtom } from "../locationAtom";
+
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
   const [, setUser] = useAtom(userAtom);
+  const [, setInitialRegion] = useAtom(initialRegionAtom);
+  const [, setLocation] = useAtom(locationAtom);
+  const [errorMsg, setErrorMsg] = useState(null);
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
     androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
   });
   const serverURL = process.env.EXPO_PUBLIC_SERVER_URL;
+
+  useEffect(() => {
+    const getInitialLocation = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      const initialLocation = await Location.getCurrentPositionAsync({});
+      setInitialRegion({
+        latitude: initialLocation.coords.latitude,
+        longitude: initialLocation.coords.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      });
+
+      setLocation(initialLocation);
+    }
+
+    getInitialLocation();
+  }, []);
 
   useEffect(() => {
     if (response?.type === "success") {
@@ -91,6 +121,7 @@ export default function App() {
 
     return () => unsubscribe();
   }, [setUser]);
+
 
   return (
     <View style={styles.container}>
