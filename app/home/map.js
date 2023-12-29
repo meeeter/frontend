@@ -12,46 +12,33 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Share,
+  Alert,
 } from "react-native";
-import KakaoShareLink from "react-native-kakao-share-link";
 import MapView, { Marker } from "react-native-maps";
-
+import { WebView } from "react-native-webview";
+import { initialRegionAtom } from "../../initialRegionAtom";
+import { locationAtom } from "../../locationAtom";
 import { userAtom } from "../../userAtom";
 import { getSocket } from "../../utils/socketConfig";
 
-export const locationAtom = atom(null);
 export const friendLocationsAtom = atom([]);
 
 export default function Map() {
   const [user] = useAtom(userAtom);
+  const [initialRegion] = useAtom(initialRegionAtom);
   const [location, setLocation] = useAtom(locationAtom);
   const [friendLocations, setFriendLocations] = useAtom(friendLocationsAtom);
-  const [initialRegion, setInitialRegion] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [placeholderText, setPlaceholderText] = useState("Search");
   const [searchedLocation, setSearchedLocation] = useState(null);
   const [searchPredictions, setSearchPredictions] = useState([]);
-  const [errorMsg, setErrorMsg] = useState(null);
   const [isW3wMode, setIsW3wMode] = useState(false);
 
   const socket = getSocket();
 
   useEffect(() => {
     const getLocation = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-
-      const initialLocation = await Location.getCurrentPositionAsync({});
-      setInitialRegion({
-        latitude: initialLocation.coords.latitude,
-        longitude: initialLocation.coords.longitude,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      });
-
       await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.Highest,
@@ -196,21 +183,37 @@ export default function Map() {
 
   const handleShareButtonPress = async () => {
     try {
-      const response = await KakaoShareLink.sendLocation({
-        address: `///${location.w3w.words}`,
-        addressTitle: "현재 내 위치 📍",
-        content: {
-          title: `현재 내 위치 📍 ///${location.w3w.words}`,
-          imageUrl: "https://i.postimg.cc/vZgSdbWC/meeeter.png",
-          link: {
-            mobileWebUrl: `http://map.kakao.com/link/search////${location.w3w.words}`,
-          },
-          description: "카카오맵에서 현재 내 위치를 확인하세요.",
-        },
+      const result = await Share.share({
+        message: `📍카카오맵에서 현재 내 위치를 확인하세요: https://map.kakao.com/link/search////${location.w3w.words}`,
       });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
     } catch (error) {
-      console.error(error);
+      Alert.alert(error.message);
     }
+    //   const response = await KakaoShareLink.sendLocation({
+    //     address: `///${location.w3w.words}`,
+    //     addressTitle: "현재 내 위치 📍",
+    //     content: {
+    //       title: `현재 내 위치 📍 ///${location.w3w.words}`,
+    //       imageUrl: "https://i.postimg.cc/vZgSdbWC/meeeter.png",
+    //       link: {
+    //         mobileWebUrl: `http://map.kakao.com/link/search////${location.w3w.words}`,
+    //       },
+    //       description: "카카오맵에서 현재 내 위치를 확인하세요.",
+    //     },
+    //   });
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   const w3wButtonColor = isW3wMode ? "#E11F26" : "white";
@@ -286,6 +289,72 @@ export default function Map() {
     },
   });
 
+  const htmlContent = `<!DOCTYPE html>
+  <html>
+  <head>
+  
+  <meta charset="utf-8">
+  
+  <style>
+  #map-container {
+      width: 100%;
+      height: 1300px;
+  }
+  </style>
+  
+  <!-- TODO: Add the value of data-initial-token with a JWT
+  dynamically generated on the server -->
+  <script src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js"
+      crossorigin async
+      data-callback="initMapKit"
+      data-libraries="map"
+      data-initial-token="eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRYTUFNOE5NNUIifQ.eyJpc3MiOiJQQzhKNFhWSlhEIiwiaWF0IjoxNzAzODMxNzU0LCJleHAiOjE3MTk3MDU2MDB9.aT8X90mCV1u4jlU-I18HJpPCo7FNp0Eva6xacu10ZbWAmVNQz4j0dQVZYO-bfHivmjSjDN23iR1jZ0rkRJ-usg"></script>
+  <script type="module">
+
+  const setupMapKitJs = async() => {
+      if (!window.mapkit || window.mapkit.loadedLibraries.length === 0) {
+          // mapkit.core.js or the libraries are not loaded yet.
+          // Set up the callback and wait for it to be called.
+          await new Promise(resolve => { window.initMapKit = resolve });
+  
+          // Clean up
+          delete window.initMapKit;
+      }
+  
+      // TODO: For production use, the JWT should not be hard-coded into JS.
+      const jwt = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRYTUFNOE5NNUIifQ.eyJpc3MiOiJQQzhKNFhWSlhEIiwiaWF0IjoxNzAzODMxNzU0LCJleHAiOjE3MTk3MDU2MDB9.aT8X90mCV1u4jlU-I18HJpPCo7FNp0Eva6xacu10ZbWAmVNQz4j0dQVZYO-bfHivmjSjDN23iR1jZ0rkRJ-usg";
+      mapkit.init({
+          authorizationCallback: done => { done(jwt); }
+      });
+  };
+  
+  /**
+   * Script Entry Point
+   */
+  const main = async() => {
+      await setupMapKitJs();
+  
+      const cupertino = new mapkit.CoordinateRegion(
+          new mapkit.Coordinate(37.3316850890998, -122.030067374026),
+          new mapkit.CoordinateSpan(0.167647972, 0.354985255)
+      );
+  
+      // Create a map in the element whose ID is "map-container"
+      const map = new mapkit.Map("map-container");
+      map.region = cupertino;
+  };
+  
+  main();
+  
+  </script>
+  </head>
+  
+  <body>
+      <div id="map-container"></div>
+  </body>
+  </html>
+  `
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -303,38 +372,13 @@ export default function Map() {
           <SimpleLineIcons name="share-alt" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      {renderSearchPredictions()}
-      {initialRegion && (
-        <MapView
-          style={styles.map}
-          initialRegion={initialRegion}
-          mapType="mutedStandard"
-          // showsUserLocation
-          followsUserLocation
-          userLocationPriority="balanced"
-          zIndex={-1}
-        >
-          {location && (
-            <Marker coordinate={location.coords} title="My Location">
-              <MaterialCommunityIcons
-                name="penguin"
-                size={40}
-                color="#E11F26"
-              />
-            </Marker>
-          )}
-          {renderFriendMarkers()}
-          {searchedLocation && (
-            <Marker
-              coordinate={searchedLocation}
-              pinColor="green"
-              title={searchPredictions[0].structured_formatting.main_text}
-            >
-              <Entypo name="location-pin" size={40} color="green" />
-            </Marker>
-          )}
-        </MapView>
-      )}
+      <WebView
+        originWhitelist={["*"]}
+        javaScriptEnabled={true}
+        // source={{ uri: "file://./map.html" }}
+        source={{ html: htmlContent }}
+        // source={{ uri: "https://vanillacoding.co" }}
+      />
       <TouchableOpacity
         style={{
           ...styles.w3wButton,

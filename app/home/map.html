@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<script
+  src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.core.js"
+  crossorigin async
+  data-callback="initMapKit"
+  data-libraries="services,full-map,geojson"
+  data-initial-token="eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRYTUFNOE5NNUIifQ.eyJpc3MiOiIgUEM4SjRYVkpYRCIsImlhdCI6MTcwMzgyOTAxOSwiZXhwIjoxNzM1NDMwNDAwfQ.UOjEs5LEbjAV9oJ_dUIbKmQA2YkyYLg6IjSwN2JZt1gnrO_UXo_d72Fu30DPLK48uZhxzxWRt_JouPbZH2LUHg"
+></script>
+
+<style>
+#map {
+    width: 100%;
+    height: 600px;
+}
+</style>
+
+</head>
+
+<body>
+<div id="map"></div>
+
+<script type="module">
+(async () => {
+    const tokenID = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRYTUFNOE5NNUIifQ.eyJpc3MiOiIgUEM4SjRYVkpYRCIsImlhdCI6MTcwMzgyOTAxOSwiZXhwIjoxNzM1NDMwNDAwfQ.UOjEs5LEbjAV9oJ_dUIbKmQA2YkyYLg6IjSwN2JZt1gnrO_UXo_d72Fu30DPLK48uZhxzxWRt_JouPbZH2LUHg";
+
+    if (!window.mapkit || window.mapkit.loadedLibraries.length === 0) {
+        // mapkit.core.js or the libraries are not loaded yet.
+        // Set up the callback and wait for it to be called.
+        await new Promise(resolve => { window.initMapKit = resolve });
+
+        // Clean up
+        delete window.initMapKit;
+    }
+
+    mapkit.init({
+        authorizationCallback: function(done) {
+            done(tokenID);
+        }
+    });
+
+    const map = new mapkit.Map("map");
+})();
+
+</script>
+</body>
+</html>
