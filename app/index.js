@@ -41,7 +41,7 @@ export default function App() {
         return;
       }
 
-      const initialLocation = await Location.getCurrentPositionAsync({});
+      const initialLocation = await Location.getLastKnownPositionAsync({});
       setInitialRegion({
         latitude: initialLocation.coords.latitude,
         longitude: initialLocation.coords.longitude,
@@ -110,7 +110,7 @@ export default function App() {
               console.error("User registration failed");
             }
           }
-          router.push("/home/settings");
+          router.push("/home/map");
         } catch (error) {
           console.error(error);
         }
