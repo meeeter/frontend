@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "meeter",
+    "name": "meeter: meet within meters",
     "slug": "meeter",
     "scheme": "meeter",
     "version": "1.0.0",
@@ -31,6 +31,14 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "8567f73a-572d-4381-ad8c-215260e2973e"
+      }
+    }
   }
 }
