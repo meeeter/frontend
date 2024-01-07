@@ -293,8 +293,6 @@ export default function Map() {
       <MapView
         style={styles.map}
         initialRegion={initialRegion}
-        showsUserLocation
-        followsUserLocation
         loadingEnabled
         loadingIndicatorColor="#E11F26"
         mapType="mutedStandard"
