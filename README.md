@@ -7,9 +7,17 @@ meet within meters, **meeter** 는 w3w 좌표체계를 기반으로, 나와 친�
 
 <hr>
 
-* 시연 GIF 1 (로그인 - 로딩 - 내 위치 지도 초기 화면)
-* 시연 GIF 2 (친구 탭 - 친구 확인 - 요청 보내기, 수락/거절 - 친구 리스트 // 디바이스 2대)
-* 시연 GIF 3 (친구 여러 명 위치 같이 보이고 변하는 것)
+# 🎬 Preview <!-- omit in toc -->
+구글 로그인 + 최초 지도 화면 | 친구 추가 및 요청 관리
+:-------------------------:|:-------------------------:
+![login-and-initial-map](./assets/images/readme/login-and-initial-map.gif)  |  ![friends-tab](./assets/images/readme/friends-tab.gif)
+
+## 👨‍👩‍👧‍👧 친구 4명이 실시간으로 위치를 공유한다면?
+사용자 1 | 사용자 2 | 사용자 3 | 사용자 4
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+![map-bkkim](./assets/images/readme/map-bkkim.gif)  |  ![map-nykwak](./assets/images/readme/map-nykwak.gif)  |  ![map-jslee](./assets/images/readme/map-jslee.gif)  |  ![map-swjun](./assets/images/readme/map-swjun.gif)
+
+
 * 시연 GIF 4 (w3w 위치 세밀하게 변하는 것 - 112, 119 신고 프롬프트 화면)
 * 시연 GIF 5 (w3w 위치 친구에게 공유하고 확인하는 것)
 
@@ -245,7 +253,7 @@ meeter 앱은 사용자 간 위치정보 공유를 위해 socket.IO 를 사용�
 
 [기존] <br> 라이브러리 사용 시 | [기술검증] <br> WebView + MapKit 직접 결합 | [최적화 후] <br> 결합 후 파인 튜닝
 :-------------------------:|:-------------------------:|:-------------------------:
-![](./assets/images/readme/loading-before.gif)  |  ![](./assets/images/readme/loading-webview-mapkit-poc.gif)  |  ![](./assets/images/readme/loading-optimized.gif)
+![loading-before](./assets/images/readme/loading-before.gif)  |  ![loading-poc](./assets/images/readme/loading-webview-mapkit-poc.gif)  |  ![loading-optimized](./assets/images/readme/loading-optimized.gif)
 평균 7-10초 소요 | 평균 1초 미만 | 딜레이 거의 느껴지지 않음
 
 ### `react-native-maps` 라이브러리와 그 한계점
