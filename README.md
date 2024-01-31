@@ -36,7 +36,7 @@ iPhone을 사용하신다면, **[이 Apple TestFlight 링크를 통해](https://
 * Apple TestFlight는 iOS 기반으로 개발된 앱이 App Store에 정식 출시되기 전에, 개발자가 자유롭게 베타 테스트를 진행할 수 있는 Apple이 제공하는 플랫폼입니다.
 * TestFlight에 게시되는 베타 빌드 또한 Apple의 꼼꼼한 검수를 받기에, 안심하고 다운받아 사용하셔도 돼요.
 * 익명의 베타 테스터로 참가하시게 되며, 앱 호환성 검토를 위한 간단한 기기정보를 제외한 그 어떠한 개인정보도 수집되지 않아요.
-* **meeter는 현재 구글 소셜 로그인을 지원하고 있어요.** 만약 구글 로그인이 꺼려지신다면, 이 로그인 정보를 사용하세요. Apple 심사 팀에서도 이 계정정보를 활용해서 앱을 테스트했답니다.
+* **meeter는 현재 구글 소셜 로그인을 지원하고 있어요.** 만약 구글 로그인이 불편하시다면, 이 로그인 정보를 사용하세요. Apple 심사 팀에서도 이 계정정보를 활용해서 앱을 테스트했답니다.
   * **ID** meeter.ios@gmail.com
   * **PW** MeeterIos0101@
 * 베타 테스트 도중 문제나 버그가 발견되었을 때, 개발자에게 스크린샷과 함께 피드백을 전송할 수 있어요. 보내주신 피드백은 세심하게 검토해서, 다음 빌드에 최대한 반영하는 것을 목표로 하고 있어요.
@@ -267,7 +267,9 @@ export default function App() {
 
 **이렇게 기기의 가속도센서와 GPS 센서를 결합하여, 기기와 배터리 성능을 최적화하면서도 사용자의 위치변화에는 그대로 기민하게 반응할 수 있게 되었습니다.**
 
-최적화 이후에 알게 된 사실이지만, GPS의 과도한 에너지 사용을 극복하기 위해서, 가속도센서와 결합하여 에너지 효율적인 반응형 GPS 샘플링(adaptive GPS sampling) 기술이 학계에서 활발히 논의 및 연구되고 있었습니다!
+최적화 이후에 알게 된 사실이지만, GPS의 과도한 에너지 사용을 극복하기 위해서, GPS를 가속도센서와 결합한 에너지 효율적인 반응형 GPS 샘플링(adaptive GPS sampling) 기술이 학계에서 활발히 논의 및 연구되고 있었습니다!
+
+한 연구는 기기 에너지, 데이터 용량, 데이터 광대역 소비를 78%나 절감하면서도 91.4%라는 매우 높은 위치 변화 정확도를 보였다고 합니다.
 
 > This paper has proposed a novel approach that applies adaptive sampling to optimize GPS sensing, using Accelerometer's data. **Based on the collected dataset, this study's results indicate the capability to reduce energy, data volume, and bandwidth consumption by 78% while preserving a relatively high accuracy: 91.4%**. Our work's strength lies in using a second less-energy-consuming sensor (Accelerometer) to produce energy-efficient sensing of a more energy-consuming sensor (GPS).
 >
