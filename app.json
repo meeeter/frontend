@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "meeeter",
-    "slug": "meeeter",
-    "scheme": "meeeter",
+    "name": "meeter: meet within meters",
+    "slug": "meeter",
+    "scheme": "meeter",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,14 +17,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "dev.leobkkim.meeeter"
+      "bundleIdentifier": "dev.leobkkim.meeter"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "dev.leobkkim.meeeter"
+      "package": "dev.leobkkim.meeter"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,8 +37,14 @@
         "origin": false
       },
       "eas": {
-        "projectId": "59ace04c-0062-4545-a93e-bd4331afd181"
+        "projectId": "8567f73a-572d-4381-ad8c-215260e2973e"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/8567f73a-572d-4381-ad8c-215260e2973e"
     }
   }
 }

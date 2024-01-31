@@ -12,46 +12,32 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Share,
+  Alert,
 } from "react-native";
-import KakaoShareLink from "react-native-kakao-share-link";
 import MapView, { Marker } from "react-native-maps";
-
+import { initialRegionAtom } from "../../initialRegionAtom";
+import { locationAtom } from "../../locationAtom";
 import { userAtom } from "../../userAtom";
 import { getSocket } from "../../utils/socketConfig";
 
-export const locationAtom = atom(null);
 export const friendLocationsAtom = atom([]);
 
 export default function Map() {
   const [user] = useAtom(userAtom);
+  const [initialRegion] = useAtom(initialRegionAtom);
   const [location, setLocation] = useAtom(locationAtom);
   const [friendLocations, setFriendLocations] = useAtom(friendLocationsAtom);
-  const [initialRegion, setInitialRegion] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [placeholderText, setPlaceholderText] = useState("Search");
   const [searchedLocation, setSearchedLocation] = useState(null);
   const [searchPredictions, setSearchPredictions] = useState([]);
-  const [errorMsg, setErrorMsg] = useState(null);
   const [isW3wMode, setIsW3wMode] = useState(false);
 
   const socket = getSocket();
 
   useEffect(() => {
     const getLocation = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-
-      const initialLocation = await Location.getCurrentPositionAsync({});
-      setInitialRegion({
-        latitude: initialLocation.coords.latitude,
-        longitude: initialLocation.coords.longitude,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      });
-
       await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.Highest,
@@ -196,20 +182,21 @@ export default function Map() {
 
   const handleShareButtonPress = async () => {
     try {
-      const response = await KakaoShareLink.sendLocation({
-        address: `///${location.w3w.words}`,
-        addressTitle: "현재 내 위치 📍",
-        content: {
-          title: `현재 내 위치 📍 ///${location.w3w.words}`,
-          imageUrl: "https://i.postimg.cc/vZgSdbWC/meeeter.png",
-          link: {
-            mobileWebUrl: `http://map.kakao.com/link/search////${location.w3w.words}`,
-          },
-          description: "카카오맵에서 현재 내 위치를 확인하세요.",
-        },
+      const result = await Share.share({
+        message: `📍카카오맵에서 현재 내 위치를 확인하세요: https://map.kakao.com/link/search////${location.w3w.words}`,
       });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
     } catch (error) {
-      console.error(error);
+      Alert.alert(error.message);
     }
   };
 
@@ -303,38 +290,18 @@ export default function Map() {
           <SimpleLineIcons name="share-alt" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      {renderSearchPredictions()}
-      {initialRegion && (
-        <MapView
-          style={styles.map}
-          initialRegion={initialRegion}
-          mapType="mutedStandard"
-          // showsUserLocation
-          followsUserLocation
-          userLocationPriority="balanced"
-          zIndex={-1}
-        >
-          {location && (
-            <Marker coordinate={location.coords} title="My Location">
-              <MaterialCommunityIcons
-                name="penguin"
-                size={40}
-                color="#E11F26"
-              />
-            </Marker>
-          )}
-          {renderFriendMarkers()}
-          {searchedLocation && (
-            <Marker
-              coordinate={searchedLocation}
-              pinColor="green"
-              title={searchPredictions[0].structured_formatting.main_text}
-            >
-              <Entypo name="location-pin" size={40} color="green" />
-            </Marker>
-          )}
-        </MapView>
-      )}
+      <MapView
+        style={styles.map}
+        initialRegion={initialRegion}
+        loadingEnabled
+        loadingIndicatorColor="#E11F26"
+        mapType="mutedStandard"
+      >
+        <Marker coordinate={location.coords} title="My Location">
+          <MaterialCommunityIcons name="penguin" size={40} color="#E11F26" />
+        </Marker>
+        {renderFriendMarkers()}
+      </MapView>
       <TouchableOpacity
         style={{
           ...styles.w3wButton,
