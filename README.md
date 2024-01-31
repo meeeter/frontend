@@ -136,7 +136,7 @@ GPS 사용을 최대한 줄인다는 것은 곧, **꼭 필요할때만 GPS를 �
 그리고 저는 이를 이용하는 Expo의 `expo-sensors` 를 통해 일반 가속도 값에 접근할 수 있었습니다. 아래 화면은 제가 휴대폰을 평평한 책상 위에 가만히 놓고 측정한 일반 가속도 값입니다.
 
 <p align="center">
-  <img width="300" src="./assets/images/readme/raw-acceleration.GIF">
+  <img width="300" src="./assets/images/readme/raw-acceleration.gif">
 </p>
 
 그런데 뭔가 이상하지 않나요? **기기는 `x`, `y`, `z`축 어떤 방향으로도 움직이지 않고 있는데, `z`축 가속도 값은 `-1`로 수렴하는 것으로 보입니다**.
@@ -203,7 +203,7 @@ export default function App() {
 결국 이 코드의 핵심은 디바이스의 물리적인 움직임에서 나오는 가속도를 정확하게 추출해내기 위한 필터링과 계산 과정입니다. 이제 일반 가속도와 선형 가속도를 함께 확인해 볼까요?
 
 <p align="center">
-  <img width="300" src="./assets/images/readme/raw-and-linear-acceleration.GIF">
+  <img width="300" src="./assets/images/readme/raw-and-linear-acceleration.gif">
 </p>
 
 휴대폰을 평평한 테이블 위에 가만히 놓았을 때, 선형 가속도의 `x`, `y`, `z`축 값 모두 0에 가까이 수렴하는 것을 확인할 수 있습니다.
