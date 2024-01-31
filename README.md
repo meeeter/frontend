@@ -62,7 +62,6 @@ Android 휴대폰을 사용하시거나 지금 당장은 체험이 어렵다면,
   - [🧐 Why React Native + Expo](#-why-react-native--expo)
     - [Expo](#expo)
   - [🧐 Why Zustand](#-why-zustand)
-- [📲 Features](#-features)
 - [🎢 Challenges](#-challenges)
   - [실시간 위치 데이터를 어떻게 효율적으로 다룰까?](#실시간-위치-데이터를-어떻게-효율적으로-다룰까)
     - [GPS 위치센서는 배터리 도둑 🪫](#gps-위치센서는-배터리-도둑-)
@@ -123,8 +122,12 @@ Expo는 단연코 React Native를 개발하기 위한 최고의 플랫폼이라�
 * `EAS Build`를 통해 앱을 편리하게 빌드하고, `EAS Submit`을 통해 App Store 및 Play Store에 손쉽게 배포하며, 배포 후에는 `EAS Update`를 통해 마이너 패치의 경우 스토어 심사 없이도 사용자에게 변경사항을 ship 하는 Over-The-Air 업데이트를 사용할 수 있음
 
 ## 🧐 Why Zustand
+프로젝트 기능과 특성, 개발기간을 고려하여 아래와 같은 상태관리 툴 선택기준을 세웠고, 가장 적합한 Zustand를 선택했습니다.
 
-# 📲 Features
+* Redux보다 상태 관리를 위한 절대적인 코드 양이 적으며, 사용이 직관적이고, 패키지 사이즈가 작아야 함
+* 이후 백그라운드 위치 권한 및 기능을 추가할 때, **컴포넌트 외부에서도 상태 변경이 가능해야 함**
+* 현재 위치정보는 클라이언트 상태로만 관리되고 있고, 서버 상태를 클라이언트가 사용할 경우는 거의 없음
+* npm trend 등에서 주간 사용자 수가 많아야 하며, 안정적으로 유지보수되고 있는 패키지여야 함
 
 # 🎢 Challenges
 
