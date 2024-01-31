@@ -17,17 +17,20 @@ meet within meters, **meeter** 는 w3w 좌표체계를 기반으로, 나와 친�
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![map-bkkim](./assets/images/readme/map-bkkim.gif)  |  ![map-nykwak](./assets/images/readme/map-nykwak.gif)  |  ![map-jslee](./assets/images/readme/map-jslee.gif)  |  ![map-swjun](./assets/images/readme/map-swjun.gif)
 
+## 🚨 정밀한 w3w 위치값 활용 (긴급신고, 위치공유)
+112 · 119 긴급신고 | 카카오맵 위치공유
+:-------------------------:|:-------------------------:
+![w3w-emergency](./assets/images/readme/w3w-emergency.gif)  |  ![w3w-share](./assets/images/readme/w3w-share.gif)
 
-* 시연 GIF 4 (w3w 위치 세밀하게 변하는 것 - 112, 119 신고 프롬프트 화면)
-* 시연 GIF 5 (w3w 위치 친구에게 공유하고 확인하는 것)
+<hr>
 
 # 🤠 Try It Out <!-- omit in toc -->
-위 미리보기가 재밌으셨나요?
+위 미리보기가 흥미로우셨나요?
 
-iPhone을 사용하신다면, [이 Apple TestFlight 링크를 통해](https://testflight.apple.com/join/nrlNSHda) meeter를 직접 체험해보세요!
+iPhone을 사용하신다면, **[이 Apple TestFlight 링크를 통해](https://testflight.apple.com/join/nrlNSHda) meeter를 직접 체험해보세요!**
 
 <details>
-<summary><strong>Apple TestFlight란?</strong></summary>
+<summary><strong>Apple TestFlight로 meeter 체험하기</strong></summary>
 <p>
 
 * Apple TestFlight는 iOS 기반으로 개발된 앱이 App Store에 정식 출시되기 전에, 개발자가 자유롭게 베타 테스트를 진행할 수 있는 Apple이 제공하는 플랫폼입니다.
