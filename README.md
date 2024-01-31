@@ -72,8 +72,9 @@ Android 휴대폰을 사용하시거나 지금 당장은 체험이 어렵다면,
   - [최초 지도 화면, 어떻게 빠르고 정확하게 로딩할까?](#최초-지도-화면-어떻게-빠르고-정확하게-로딩할까)
     - [로딩 지연 원인에 대한 가설 수립 및 검증](#로딩-지연-원인에-대한-가설-수립-및-검증)
     - [라이브러리의 편리함에 속아 주도권을 잃다](#라이브러리의-편리함에-속아-주도권을-잃다)
-    - [기존 해결책들](#기존-해결책들)
-    - [웹뷰를 통해서 MapKit JS를 직접 받아오고, 받아오는 데이터의 크기를 줄이자!](#웹뷰를-통해서-mapkit-js를-직접-받아오고-받아오는-데이터의-크기를-줄이자)
+    - [WebView와 MapKit JS 직접 연결](#webview와-mapkit-js-직접-연결)
+    - [번외 1) 라이브러리를 유지한다고 전제했을 때, 고려한 방법들](#번외-1-라이브러리를-유지한다고-전제했을-때-고려한-방법들)
+    - [번외 2) 그럼 `react-native-maps` 라이브러리는 왜 여전히 많은 사람들이 쓰는건데..? :thinking:](#번외-2-그럼-react-native-maps-라이브러리는-왜-여전히-많은-사람들이-쓰는건데-thinking)
   - [자기참조형 데이터 모델링을 이용한 용량 효율적인 쿼리 구현](#자기참조형-데이터-모델링을-이용한-용량-효율적인-쿼리-구현)
 - [:books: Lessons Learned](#books-lessons-learned)
   - [사용자 경험 중심의 지속적인 제품 개선의 중요성](#사용자-경험-중심의-지속적인-제품-개선의-중요성)
@@ -313,6 +314,8 @@ meeter 앱은 사용자 간 위치정보 공유를 위해 socket.IO 를 사용�
 ![loading-before](./assets/images/readme/loading-before.gif)  |  ![loading-poc](./assets/images/readme/loading-webview-mapkit-poc.gif)  |  ![loading-optimized](./assets/images/readme/loading-optimized.gif)
 평균 7-10초 소요 | 평균 1초 미만 | 딜레이 거의 느껴지지 않음
 
+<br>
+
 ### 로딩 지연 원인에 대한 가설 수립 및 검증
 meeter 앱을 처음 시작할 때, 상단의 좌측 화면과 같이 평균적으로 10초 가까이 빈 화면이 표시되었습니다. 현재 위치를 빠르고 정확하게 보여줘야하는 지도 기반 앱의 특성상, 이는 매우 치명적인 이슈였고 사용자 경험도 심각하게 해치고 있는 상황이었습니다.
 
@@ -325,6 +328,8 @@ meeter 앱을 처음 시작할 때, 상단의 좌측 화면과 같이 평균적�
 2번 가설을 검증하기 위해서는 기존에 meeter 앱이 어떻게 지도 정보를 받아오고 있는지를 확인해야 했습니다. 당시 저는 React Native 커뮤니티에서 지도를 렌더링하기 위해 널리 통용되는 `react-native-maps` 라이브러리의 `<MapView>` 기능을 사용하고 있었습니다. 라이브러리의 내부 코드를 확인해보니, iOS 기준으로 Apple MapKit JS의 지도 데이터를 받아와 사용하고 있다는 것 외에 별다른 특이점은 보이지 않았습니다.
 
 그렇게 Apple MapKit JS에 대한 조사를 이어나가던 중, 저는 [Apple Tech Talks의 한 영상](https://developer.apple.com/videos/play/tech-talks/110353/)을 보고는 지금껏 편리하게 사용해왔던 라이브러리의 한계점을 뼈저리게 느끼게 됩니다.
+
+<br>
 
 ### 라이브러리의 편리함에 속아 주도권을 잃다
 `Meet high-performance MapKit JS` 라는 제목의 10분 남짓되는 이 발표는, 제목 그대로 MapKit JS를 앱에서 사용할 때 어떻게 더 나은 성능을 낼 수 있는지에 대한 소개였습니다. 그리고 지금 제게 가장 필요한 기능들을 약속해주었죠.
@@ -341,8 +346,12 @@ meeter 앱을 처음 시작할 때, 상단의 좌측 화면과 같이 평균적�
 
 예를 들어 meeter의 경우, MapKit이 제공하는 `Basic Map`, `Overlays`, `Annotations`, `User Location Display`, `Services`, `GeoJSON` 등 방대한 데이터와 API 중 **`Basic Map`만 우선적으로 받아와서 최초 지도 화면을 렌더링**하고, 이후에 필요한 데이터들을 추가적으로 로드해오면 되었죠.
 
-안타깝게도, `react-native-maps` 라이브러리를 사용하면서는 이러한 커스텀 기능을 사용할 수 없었습니다. **라이브러리는 많은 요소들을 추상화하여 개발자로 하여금 쉽고 빠르게 개발을 할 수 있게 돕지만, 한편으로는 이러한 미세한 부분에 대한 제어를 불가능하게 하죠.** 그래서 저는 `react-native-maps` 라이브러리를 제거하고, WebView와 MapKit JS를 직접 연결해서 지도 화면을 구현하기로 결정했습니다.
+안타깝게도, `react-native-maps` 라이브러리를 사용하면서는 이러한 커스텀 기능을 사용할 수 없었습니다. **라이브러리는 많은 요소들을 추상화하여 개발자로 하여금 쉽고 빠르게 개발을 할 수 있게 돕지만, 한편으로는 이러한 미세한 부분에 대한 제어를 불가능하게 하죠.**
 
+<br>
+
+### WebView와 MapKit JS 직접 연결
+그래서 저는 `react-native-maps` 라이브러리를 제거하고, WebView와 MapKit JS를 직접 연결해서 지도 화면을 구현하기로 결정했습니다.
 
 ```html
 <script
@@ -356,27 +365,40 @@ meeter 앱을 처음 시작할 때, 상단의 좌측 화면과 같이 평균적�
 
 그리고 그 기술 검증의 결과물이 바로 이 화면입니다.
 
-![loading-poc](./assets/images/readme/loading-webview-mapkit-poc.gif)
+<p align="center">
+  <img width="400" src="./assets/images/readme/loading-webview-mapkit-poc.gif" alt="Loading WebView MapKit POC">
+</p>
 
+기술 검증 후에는, 지도 속성을 조절하고 앱의 여타 로직과 연결하여 매끄러운 최초 지도 로딩 화면을 구현해냈습니다.
 
+<p align="center">
+  <img width="400" src="./assets/images/readme/loading-optimized.gif" alt="Loading Optimized">
+</p>
 
+<br>
 
-### 기존 해결책들
+### 번외 1) 라이브러리를 유지한다고 전제했을 때, 고려한 방법들
+* 최초 사용자 위치를 중심으로 한 지도 스냅샷 [Maps Web Snapshot](https://developer.apple.com/documentation/snapshots)을 우선 보여주고, 인터랙티브 맵이 로딩되고나면 그 화면으로 갈아끼우는 방법
+  * 사실상 가장 유력한 대안이었고, **렌더링에 필요한 최소한의 데이터를 먼저 로드해오고, 이후 로딩된 전체 데이터를 제공한다는 점**에서 현재 해결책 (WebView + MapKit 직접 결합)과 가장 발상이 유사한 방법
+* 가장 마지막으로 meeter 앱을 사용했을 때의 지도 화면을 기기의 `asyncStorage`에 캐싱해두었다가 다음 앱 부팅 시 초기 화면으로 보여주는 방식
+  * 앱이 종료되는 시점의 지도 화면을 기억해야하는 어려움이 있고, 앱 종료와 다음 부팅 사이 사용자가 위치를 많이 이동했다면 지도가 '날아가는' 어색한 움직임이 발생한다는 단점
+* 앱의 부팅 화면인 스플래시 스크린으로 시간을 벌거나, 로딩 애니메이션을 보여주기
+  * 근본적인 해결책이 아닌 임시방편
 
-### 웹뷰를 통해서 MapKit JS를 직접 받아오고, 받아오는 데이터의 크기를 줄이자!
-inspired by 애플 테크 발표 영상
+<br>
+
+### 번외 2) 그럼 `react-native-maps` 라이브러리는 왜 여전히 많은 사람들이 쓰는건데..? :thinking:
+> [Location.getCurrentPositionAsync(options)](https://docs.expo.dev/versions/latest/sdk/location/#locationgetcurrentpositionasyncoptions)
+>
+> Requests for one-time delivery of the user's current location. Depending on given accuracy option **it may take some time to resolve, especially when you're inside a building.**
+>
+> Note: Calling it causes the location manager to obtain a location fix **which may take several seconds**. Consider using [Location.getLastKnownPositionAsync](https://docs.expo.dev/versions/latest/sdk/location/#locationgetcurrentpositionasyncoptions) **if you expect to get a quick response and high accuracy is not required.**
+
+위 공식문서에 설명되어 있듯이, 지도 로딩 지연을 유발하는 `Location.getCurrentPositionAsync()` 메소드 대신 `Location.getLastKnownPositionAsync()` 메소드를 사용할 수는 있습니다. 하지만 기술되어 있듯 위치 정확도가 높지 않고, 마지막으로 확인된 위치를 보여주기에 지도가 '날아가는' 어색한 움직임이 발생할 수 있습니다.
+
+저는 위치 데이터의 정확성과 실시간성을 지키면서도, 지도의 최초 로딩시간을 단축하고자 라이브러리를 제거하고 WebView와 MapKit을 직접 결합하는 방법을 채택했습니다.
 
 ## 자기참조형 데이터 모델링을 이용한 용량 효율적인 쿼리 구현
-
-<!-- ### "의미있는" 위치변화가 있을 때만 소켓으로 공유하자
-
-유의미하다 = 친구에게 내 변경된 위치를 알려줄만큼 위치가 변했다
-5초마다 한번? 위치가 변경되지 않았다면..? 예를 들어서 자고 있을때는?
-거리가 10m 이상 차이나면? 그러면 GPS를 거의 항시 켜놓고 계속해서 위치정보를 확인해야 하는데..
-
-
-
-가속도센서 변화가 감지되면 (기기 성능 및 배터리 소모 최적화) => GPS 확인하고 => timeInterval, distanceInterval 체크해서 변화가 유의미하다고 판단되면, 그때 (소켓 최적화) => 소켓 emit -->
 
 # :books: Lessons Learned
 ## 사용자 경험 중심의 지속적인 제품 개선의 중요성
