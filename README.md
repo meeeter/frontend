@@ -1,6 +1,6 @@
 # 📍 meeter <!-- omit in toc -->
 <p align="center">
-  <img src="./assets/images/readme/header-image.png" alt="Meeter">
+  <img width="500" src="./assets/images/readme/header-image.png" alt="Meeter">
 </p>
 
 meet within meters, **meeter** 는 w3w 좌표체계를 기반으로, 나와 친구의 정확한 위치를 확인하고 실시간으로 공유할 수 있는 **하이퍼로컬 모바일 앱**입니다.
@@ -64,10 +64,10 @@ Android 휴대폰을 사용하시거나 지금 당장은 체험이 어렵다면,
     - [웹뷰를 통해서 MapKit JS를 직접 받아오고, 받아오는 데이터의 크기를 줄이자!](#웹뷰를-통해서-mapkit-js를-직접-받아오고-받아오는-데이터의-크기를-줄이자)
   - [자기참조형 데이터 모델링을 이용한 용량 효율적인 쿼리 구현](#자기참조형-데이터-모델링을-이용한-용량-효율적인-쿼리-구현)
 - [:books: Lessons Learned](#books-lessons-learned)
-  - [사용자 경험을 중심으로 한 지속적인 제품 개선의 중요성](#사용자-경험을-중심으로-한-지속적인-제품-개선의-중요성)
+  - [사용자 경험 중심의 지속적인 제품 개선의 중요성](#사용자-경험-중심의-지속적인-제품-개선의-중요성)
   - [능동적이고 창의적인 문제해결의 즐거움](#능동적이고-창의적인-문제해결의-즐거움)
 
-
+<hr>
 
 # 💡 Motivation
 
@@ -92,7 +92,6 @@ Android 휴대폰을 사용하시거나 지금 당장은 체험이 어렵다면,
 |![react native](./assets/images/readme/header-image.png) | ![meeter header](./assets/images/readme/header-image.png)| -->
 
 ## 🧐 Why React Native + Expo
-
 
 ## 🧐 Why Zustand
 
@@ -264,7 +263,7 @@ inspired by 애플 테크 발표 영상
 가속도센서 변화가 감지되면 (기기 성능 및 배터리 소모 최적화) => GPS 확인하고 => timeInterval, distanceInterval 체크해서 변화가 유의미하다고 판단되면, 그때 (소켓 최적화) => 소켓 emit -->
 
 # :books: Lessons Learned
-## 사용자 경험을 중심으로 한 지속적인 제품 개선의 중요성
+## 사용자 경험 중심의 지속적인 제품 개선의 중요성
 개발 후 production 빌드를 Apple TestFlight 심사를 통해 업로드하고, 베타 테스트를 진행했습니다 (2024년 1월). 개발기간에는 차마 생각하지 못했거나, 놓쳤던 버그들에 대한 소중한 유저 피드백을 경청하고, 사용자 경험을 가장 크게 저해하는, 즉 개선하였을 때 가장 큰 임팩트를 낼 부분부터 우선순위를 두고 지속적으로 개선했습니다.
 
 ## 능동적이고 창의적인 문제해결의 즐거움
