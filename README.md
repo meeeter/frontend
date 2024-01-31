@@ -203,7 +203,7 @@ export default function App() {
 결국 이 코드의 핵심은 디바이스의 물리적인 움직임에서 나오는 가속도를 정확하게 추출해내기 위한 필터링과 계산 과정입니다. 이제 일반 가속도와 선형 가속도를 함께 확인해 볼까요?
 
 <p align="center">
-  <img width="300" src="./assets/images/readme/raw-and-linear-acceleration.gif">
+  <img width="300" src="./assets/images/readme/linear-acceleration.gif">
 </p>
 
 휴대폰을 평평한 테이블 위에 가만히 놓았을 때, 선형 가속도의 `x`, `y`, `z`축 값 모두 0에 가까이 수렴하는 것을 확인할 수 있습니다.
