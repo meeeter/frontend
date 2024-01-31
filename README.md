@@ -1,6 +1,6 @@
 # 📍 meeter <!-- omit in toc -->
 <p align="center">
-  <img width="400" src="./assets/images/readme/header-image.png" alt="Meeter">
+  <img src="./assets/images/readme/header-image.png" alt="Meeter">
 </p>
 
 meet within meters, **meeter** 는 w3w 좌표체계를 기반으로, 나와 친구의 정확한 위치를 확인하고 실시간으로 공유할 수 있는 **하이퍼로컬 모바일 앱**입니다.
@@ -39,7 +39,7 @@ Android 휴대폰을 사용하시거나 지금 당장은 체험이 어렵다면,
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=dTFjQ8IDwvA&t=716s">
-    <img width="500" src="./assets/images/readme/demo-preview.png" alt="Demo Preview">
+    <img src="./assets/images/readme/demo-preview.png" alt="Demo Preview">
   </a>
 </p>
 
@@ -134,13 +134,8 @@ GPS 사용을 최대한 줄인다는 것은 곧, **꼭 필요할때만 GPS를 �
 
 그 순간, iPhone의 두 가지 흥미로운 기능들이 제 뇌리를 스쳤습니다. iPhone은 GPS 위치센서가 꺼져 있어도, 사용자가 교통사고를 당했는지, 또는 운전중인지를 감지할 수 있습니다. **어떻게 GPS 없이 이러한 사용자의 움직임을 파악할 수 있을까요?**
 
-<!-- <figure>
-  <img src="./assets/images/readme/iphone-features.png" alt="iphone-features">
-  <figcaption>대부분의 최신 모바일 기기에서 지원하는 충돌 감지 기능과 운전 감지 기능</figcaption>
-</figure> -->
-
 <p align="center">
-  <img width="500" src="./assets/images/readme/iphone-features.png" alt="iPhone Features">
+  <img src="./assets/images/readme/iphone-features.png" alt="iPhone Features">
 </p>
 
 > So how does this technology work? The new iPhone models, along with the Watch Series 8 and Ultra, have **a 3-axis gyroscope and a high G-4 accelerometer, which samples motion at over 3000 times a second**. It means that when a car is going really fast and then abruptly stops or slows down, it's able to sense the precise moment of impact, or the change in that motion.
@@ -155,7 +150,7 @@ GPS 사용을 최대한 줄인다는 것은 곧, **꼭 필요할때만 GPS를 �
 그럼 네이티브 기기의 가속도센서 측정값을 어떻게 사용할 수 있을까요? Apple은 `Core Motion` 프레임워크를 통해 일반 가속도 값(raw acceleration)을 제공합니다.
 
 <p align="center">
-  <img width="300" src="./assets/images/readme/apple-accelerometer.png" alt="Apple Accelerometer">
+  <img width="400" src="./assets/images/readme/apple-accelerometer.png" alt="Apple Accelerometer">
 </p>
 
 위 그림과 같이, 가속도센서는 `x`, `y`, `z` 3차원 축을 따라 작용하는 가속도 측정값을 제공합니다.
@@ -163,7 +158,7 @@ GPS 사용을 최대한 줄인다는 것은 곧, **꼭 필요할때만 GPS를 �
 그리고 저는 이를 이용하는 Expo의 `expo-sensors` 를 통해 일반 가속도 값에 접근할 수 있었습니다. 아래 화면은 제가 휴대폰을 평평한 책상 위에 가만히 놓고 측정한 일반 가속도 값입니다.
 
 <p align="center">
-  <img width="300" src="./assets/images/readme/raw-acceleration.gif" alt="Raw Acceleration">
+  <img width="400" src="./assets/images/readme/raw-acceleration.gif" alt="Raw Acceleration">
 </p>
 
 그런데 뭔가 이상하지 않나요? **기기는 `x`, `y`, `z`축 어떤 방향으로도 움직이지 않고 있는데, `z`축 가속도 값은 `-1`로 수렴하는 것으로 보입니다**.
@@ -230,7 +225,7 @@ export default function App() {
 결국 이 코드의 핵심은 디바이스의 물리적인 움직임에서 나오는 가속도를 정확하게 추출해내기 위한 필터링과 계산 과정입니다. 이제 일반 가속도와 선형 가속도를 함께 확인해 볼까요?
 
 <p align="center">
-  <img width="300" src="./assets/images/readme/linear-acceleration.gif" alt="Linear Acceleration">
+  <img width="400" src="./assets/images/readme/linear-acceleration.gif" alt="Linear Acceleration">
 </p>
 
 휴대폰을 평평한 테이블 위에 가만히 놓았을 때, 선형 가속도의 `x`, `y`, `z`축 값 모두 0에 가까이 수렴하는 것을 확인할 수 있습니다.
@@ -242,7 +237,7 @@ export default function App() {
 meeter 앱은 사용자 간 위치정보 공유를 위해 socket.IO 를 사용합니다. 아래 도식은 이상적인 상황에서의
 
 <p align="center">
-  <img width="500" src="./assets/images/readme/meeter-architecture-as-is.svg" alt="Meeter Architecture as-is">
+  <img src="./assets/images/readme/meeter-architecture-as-is.svg" alt="Meeter Architecture as-is">
 </p>
 
 (소켓 도식 as-is vs. to-be)
