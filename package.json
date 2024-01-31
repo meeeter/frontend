@@ -1,6 +1,6 @@
 {
   "name": "meeter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
@@ -25,7 +25,6 @@
     "expo-sms": "~11.4.0",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
-    "expo-updates": "^0.24.9",
     "expo-web-browser": "~12.3.2",
     "firebase": "^10.3.1",
     "jotai": "^2.4.1",
