@@ -1,6 +1,6 @@
-# 📍 meeter
+# 📍 meeter <!-- omit in toc -->
 <p align="center">
-  <img width="400" src="./assets/images/readme/header-image.png">
+  <img width="400" src="./assets/images/readme/header-image.png" alt="Meeter">
 </p>
 
 meet within meters, **meeter** 는 w3w 좌표체계를 기반으로, 나와 친구의 정확한 위치를 확인하고 실시간으로 공유할 수 있는 **하이퍼로컬 모바일 앱**입니다.
@@ -13,34 +13,59 @@ meet within meters, **meeter** 는 w3w 좌표체계를 기반으로, 나와 친�
 * 시연 GIF 4 (w3w 위치 세밀하게 변하는 것 - 112, 119 신고 프롬프트 화면)
 * 시연 GIF 5 (w3w 위치 친구에게 공유하고 확인하는 것)
 
-# 🤠 Try It Out!
+# 🤠 Try It Out <!-- omit in toc -->
+위 미리보기가 재밌으셨나요?
 
-위 시연 화면이 재밌으셨나요? iPhone을 사용하신다면, 간단한 설치를 통해 meeter를 직접 체험해 볼 수도 있습니다!
+iPhone을 사용하신다면, [이 Apple TestFlight 링크를 통해](https://testflight.apple.com/join/nrlNSHda) meeter를 직접 체험해보세요!
 
 <details>
-<summary>meeter 설치 따라하기</summary>
-<div>
-1. https://testflight.apple.com/join/nrlNSHda
+<summary><strong>Apple TestFlight란?</strong></summary>
+<p>
 
-</div>
+* Apple TestFlight는 iOS 기반으로 개발된 앱이 App Store에 정식 출시되기 전에, 개발자가 자유롭게 베타 테스트를 진행할 수 있는 Apple이 제공하는 플랫폼입니다.
+* TestFlight에 게시되는 베타 빌드 또한 Apple의 꼼꼼한 검수를 받기에, 안심하고 다운받아 사용하셔도 돼요.
+* 익명의 베타 테스터로 참가하시게 되며, 앱 호환성 검토를 위한 간단한 기기정보를 제외한 그 어떠한 개인정보도 수집되지 않아요.
+* **meeter는 현재 구글 소셜 로그인을 지원하고 있어요.** 만약 구글 로그인이 꺼려지신다면, 이 로그인 정보를 사용하세요. Apple 심사 팀에서도 이 계정정보를 활용해서 앱을 테스트했답니다.
+  * **ID** meeter.ios@gmail.com
+  * **PW** MeeterIos0101@
+* 베타 테스트 도중 문제나 버그가 발견되었을 때, 개발자에게 스크린샷과 함께 피드백을 전송할 수 있어요. 보내주신 피드백은 세심하게 검토해서, 다음 빌드에 최대한 반영하는 것을 목표로 하고 있어요.
+
+</p>
 </details>
 
-크로스플랫폼 앱 개발 프레임워크인 React Native 덕에, Android 베타 테스트도 곧 지원할 예정이에요.
+<br>
 
-## Apple TestFlight
+Android 휴대폰을 사용하시거나 지금 당장은 체험이 어렵다면, 시연이 포함된 5분 내외의 meeter 발표 영상을 보실 수도 있어요 :wink:
 
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=dTFjQ8IDwvA&t=716s">
+    <img width="500" src="./assets/images/readme/demo-preview.png" alt="Demo Preview">
+  </a>
+</p>
 
-* Apple TestFlight에 대한 간단한 설명
-* 익명의 베타 테스터가 되지만, 개인정보는 아무것도 수집하지 않아요.
-* 만약 구글 로그인이 꺼려진다면, 이 로그인 정보를 사용하세요. Apple 심사 팀에서도 이 계정정보를 활용해서 앱을 테스트 했답니다! (낮은 확률로 MFA가 필요할 수 있어요 :sob: 그 경우에는 직접 구글 로그인을 하셔서 테스트를 진행하시면 된답니다.)
-  * meeter.ios@gmail.com
-  * MeeterIos0101@
-* 베타 테스트 도중 버그나 문제가 발견했을 때 개발자에게 피드백을 직접 전송할 수 있어요 (스크린샷과 함께). 베타 테스트 피드백은 세심하게 검토해서 다음 빌드에 최대한 반영하는 것을 목표로 하고 있어요.
+<hr>
 
-* 지금 당장은 체험이 어렵다면, 시연이 포함된 5분 내외의 meeter 발표 영상을 보실 수도 있어요 :wink:
-* 시연 영상 썸네일 + 특정 타임스탬프로 링크
-
-# :book: Table of Contents
+# :book: Table of Contents <!-- omit in toc -->
+- [💡 Motivation](#-motivation)
+- [🎨 Tech Stack](#-tech-stack)
+  - [🧐 Why React Native + Expo](#-why-react-native--expo)
+  - [🧐 Why Zustand](#-why-zustand)
+- [📲 Features](#-features)
+- [🎢 Challenges](#-challenges)
+  - [실시간 위치 데이터를 어떻게 효율적으로 다룰까?](#실시간-위치-데이터를-어떻게-효율적으로-다룰까)
+    - [GPS 위치센서는 배터리 도둑 🪫](#gps-위치센서는-배터리-도둑-)
+    - [기기가 움직였을 때만 GPS를 사용하자](#기기가-움직였을-때만-gps를-사용하자)
+    - [네이티브 기기가 가속도 값을 제공하긴 하는데.. :thinking:](#네이티브-기기가-가속도-값을-제공하긴-하는데-thinking)
+    - [일반 가속도 값을 선형 가속도 값으로 변환하기](#일반-가속도-값을-선형-가속도-값으로-변환하기)
+    - [과도한 소켓 통신](#과도한-소켓-통신)
+  - [최초 지도 화면, 어떻게 빠르고 정확하게 로딩할까?](#최초-지도-화면-어떻게-빠르고-정확하게-로딩할까)
+    - [react-native-maps와 그 한계점](#react-native-maps와-그-한계점)
+    - [기존 해결책들](#기존-해결책들)
+    - [웹뷰를 통해서 MapKit JS를 직접 받아오고, 받아오는 데이터의 크기를 줄이자!](#웹뷰를-통해서-mapkit-js를-직접-받아오고-받아오는-데이터의-크기를-줄이자)
+  - [자기참조형 데이터 모델링을 이용한 용량 효율적인 쿼리 구현](#자기참조형-데이터-모델링을-이용한-용량-효율적인-쿼리-구현)
+- [:books: Lessons Learned](#books-lessons-learned)
+  - [사용자 경험을 중심으로 한 지속적인 제품 개선의 중요성](#사용자-경험을-중심으로-한-지속적인-제품-개선의-중요성)
+  - [능동적이고 창의적인 문제해결의 즐거움](#능동적이고-창의적인-문제해결의-즐거움)
 
 
 
@@ -114,7 +139,9 @@ GPS 사용을 최대한 줄인다는 것은 곧, **꼭 필요할때만 GPS를 �
   <figcaption>대부분의 최신 모바일 기기에서 지원하는 충돌 감지 기능과 운전 감지 기능</figcaption>
 </figure> -->
 
-![iphone-features](./assets/images/readme/iphone-features.png)
+<p align="center">
+  <img width="500" src="./assets/images/readme/iphone-features.png" alt="iPhone Features">
+</p>
 
 > So how does this technology work? The new iPhone models, along with the Watch Series 8 and Ultra, have **a 3-axis gyroscope and a high G-4 accelerometer, which samples motion at over 3000 times a second**. It means that when a car is going really fast and then abruptly stops or slows down, it's able to sense the precise moment of impact, or the change in that motion.
 >
@@ -128,7 +155,7 @@ GPS 사용을 최대한 줄인다는 것은 곧, **꼭 필요할때만 GPS를 �
 그럼 네이티브 기기의 가속도센서 측정값을 어떻게 사용할 수 있을까요? Apple은 `Core Motion` 프레임워크를 통해 일반 가속도 값(raw acceleration)을 제공합니다.
 
 <p align="center">
-  <img width="300" src="./assets/images/readme/apple-accelerometer.png">
+  <img width="300" src="./assets/images/readme/apple-accelerometer.png" alt="Apple Accelerometer">
 </p>
 
 위 그림과 같이, 가속도센서는 `x`, `y`, `z` 3차원 축을 따라 작용하는 가속도 측정값을 제공합니다.
@@ -136,7 +163,7 @@ GPS 사용을 최대한 줄인다는 것은 곧, **꼭 필요할때만 GPS를 �
 그리고 저는 이를 이용하는 Expo의 `expo-sensors` 를 통해 일반 가속도 값에 접근할 수 있었습니다. 아래 화면은 제가 휴대폰을 평평한 책상 위에 가만히 놓고 측정한 일반 가속도 값입니다.
 
 <p align="center">
-  <img width="300" src="./assets/images/readme/raw-acceleration.gif">
+  <img width="300" src="./assets/images/readme/raw-acceleration.gif" alt="Raw Acceleration">
 </p>
 
 그런데 뭔가 이상하지 않나요? **기기는 `x`, `y`, `z`축 어떤 방향으로도 움직이지 않고 있는데, `z`축 가속도 값은 `-1`로 수렴하는 것으로 보입니다**.
@@ -203,7 +230,7 @@ export default function App() {
 결국 이 코드의 핵심은 디바이스의 물리적인 움직임에서 나오는 가속도를 정확하게 추출해내기 위한 필터링과 계산 과정입니다. 이제 일반 가속도와 선형 가속도를 함께 확인해 볼까요?
 
 <p align="center">
-  <img width="300" src="./assets/images/readme/linear-acceleration.gif">
+  <img width="300" src="./assets/images/readme/linear-acceleration.gif" alt="Linear Acceleration">
 </p>
 
 휴대폰을 평평한 테이블 위에 가만히 놓았을 때, 선형 가속도의 `x`, `y`, `z`축 값 모두 0에 가까이 수렴하는 것을 확인할 수 있습니다.
@@ -213,11 +240,25 @@ export default function App() {
 
 ### 과도한 소켓 통신
 meeter 앱은 사용자 간 위치정보 공유를 위해 socket.IO 를 사용합니다. 아래 도식은 이상적인 상황에서의
-![meeter-architecture-as-is](./assets/images/readme/meeter-architecture-as-is.svg)
 
+<p align="center">
+  <img width="500" src="./assets/images/readme/meeter-architecture-as-is.svg" alt="Meeter Architecture as-is">
+</p>
 
+(소켓 도식 as-is vs. to-be)
 
-### "의미있는" 위치변화가 있을 때만 소켓으로 공유하자
+## 최초 지도 화면, 어떻게 빠르고 정확하게 로딩할까?
+
+### react-native-maps와 그 한계점
+
+### 기존 해결책들
+
+### 웹뷰를 통해서 MapKit JS를 직접 받아오고, 받아오는 데이터의 크기를 줄이자!
+inspired by 애플 테크 발표 영상
+
+## 자기참조형 데이터 모델링을 이용한 용량 효율적인 쿼리 구현
+
+<!-- ### "의미있는" 위치변화가 있을 때만 소켓으로 공유하자
 
 유의미하다 = 친구에게 내 변경된 위치를 알려줄만큼 위치가 변했다
 5초마다 한번? 위치가 변경되지 않았다면..? 예를 들어서 자고 있을때는?
@@ -225,28 +266,11 @@ meeter 앱은 사용자 간 위치정보 공유를 위해 socket.IO 를 사용�
 
 
 
-가속도센서 변화가 감지되면 (기기 성능 및 배터리 소모 최적화) => GPS 확인하고 => timeInterval, distanceInterval 체크해서 변화가 유의미하다고 판단되면, 그때 (소켓 최적화) => 소켓 emit
-
-(소켓 도식 as-is vs. to-be)
-#### Last Known Location?
-
-## 최초 지도 로딩 지연, 어떻게 사용자 친화적으로 해결할까?
-### react-native-maps와 그 한계점
-### 기존 해결책들
-### 웹뷰를 통해서 MapKit JS를 직접 받아오고, 받아오는 데이터의 크기를 줄이자!
-inspired by 애플 테크 발표 영상
-
-## 자기참조형 데이터 모델링을 이용한 용량 효율적인 쿼리 구현
-
-## 
+가속도센서 변화가 감지되면 (기기 성능 및 배터리 소모 최적화) => GPS 확인하고 => timeInterval, distanceInterval 체크해서 변화가 유의미하다고 판단되면, 그때 (소켓 최적화) => 소켓 emit -->
 
 # :books: Lessons Learned
-## 사용자 경험의 pain point를 기술로 해결하기
-베타 테스트
+## 사용자 경험을 중심으로 한 지속적인 제품 개선의 중요성
+개발 후 production 빌드를 Apple TestFlight 심사를 통해 업로드하고, 베타 테스트를 진행했습니다 (2024년 1월). 개발기간에는 차마 생각하지 못했거나, 놓쳤던 버그들에 대한 소중한 유저 피드백을 경청하고, 사용자 경험을 가장 크게 저해하는, 즉 개선하였을 때 가장 큰 임팩트를 낼 부분부터 우선순위를 두고 지속적으로 개선했습니다.
 
-
-## 능동적이고 창의적인 문제해결 과정
-논문, Github Issues
+## 능동적이고 창의적인 문제해결의 즐거움
 여러가지 가능성을 비교탐구하고, 합리적인 근거를 들어 채택하는 과정
-
-<!-- # :telescope: Looking Forward -->
