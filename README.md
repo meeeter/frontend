@@ -388,7 +388,7 @@ meeter 앱을 처음 시작할 때, 상단의 좌측 화면과 같이 평균적�
 머리를 싸매고 고민하면서, 카카오맵이나 구글 맵 같은 시중 지도 서비스는 어떻게 빠른 로딩시간을 실현했는지 궁금해서 Kakao Dev Talk에 호기롭게 질문드렸으나.. 내부 기밀이라 설명이 힘들다는 답변을 받았습니다 :sob: 지금 생각하면 안 알려주는 것이 당연히 맞는데, 그 당시에는 지푸라기라도 붙잡는 심정으로 질문을 드렸던 것 같습니다.
 
 <p align="center">
-  <img src="./assets/images/readme/kakao-question.png" alt="Kakao Question">
+  <img width="400" src="./assets/images/readme/kakao-question.png" alt="Kakao Question">
 </p>
 
 <br>
